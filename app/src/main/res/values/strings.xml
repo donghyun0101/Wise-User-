@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">오늘의 명언</string>
+
+    <string name="save_wise">저장 되었습니다.\n갤러리에서 확인해 주세요.</string>
+    <string name="fail_save">저장에 실패하였습니다.\n개발자에게 문의해 주세요.</string>
+
+    <string name="per_yes">권한이 허용되었습니다.\n다시한번 저장해 주세요.</string>
+    <string name="per_no">권한이 없다면, 명언을 저장할 수 없습니다.</string>
+
+    <string name="service_start">명언 앱이 실행되었습니다.</string>
+</resources>
