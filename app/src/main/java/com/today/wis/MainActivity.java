@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -49,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     public String[] wise, name;
     private int setNumber;
 
+    Intent serviceIntent; //2020-02-25 추가
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -63,9 +66,32 @@ public class MainActivity extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
                 WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
 
+        /*
+        //2020-02-25 주석처리
         Intent intent = new Intent(getApplicationContext(), StartService.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startService(intent);
+         */
+
+        //2020-02-25 추가
+        if (StartService.serviceIntent == null)
+        {
+            serviceIntent = new Intent(getApplicationContext(), StartService.class);
+            serviceIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            Intent startserviceintent = new Intent(MainActivity.this, StartService.class);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            {
+                startForegroundService(startserviceintent);
+            }
+            else
+            {
+                startService(startserviceintent);
+            }
+        }
+        else
+        {
+            serviceIntent = StartService.serviceIntent;
+        }
 
         layScreen = findViewById(R.id.lay_screen);
         imgList = findViewById(R.id.imgbtn_list);
@@ -128,6 +154,14 @@ public class MainActivity extends AppCompatActivity
     {
         super.onDestroy();
         Log.e("state", "onDestroy");
+
+        //2020-02-25 추가
+        if (serviceIntent != null)
+        {
+            stopService(serviceIntent);
+            serviceIntent = null;
+        }
+
         Crouton.cancelAllCroutons();
     }
 
